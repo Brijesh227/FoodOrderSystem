@@ -15,31 +15,33 @@ import { ref, set, push, get, child } from "firebase/database";
 
 const Register = () => {
   const [emailValid, setemailValid] = useState(false);
-  const [userArray, setUserArray] = useState([]);
+  // const [userArray, setUserArray] = useState([]);
 
-  useEffect(() => {
-    const dbRef = ref(firebaseDb);
-    get(child(dbRef, `/userPool`))
-      .then((snapshot) => {
-        if (snapshot.exists()) {
-          setUserArray(snapshot.val());
-        } else {
-          console.log("No data available");
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
+  // useEffect(() => {
+    // const dbRef = ref(firebaseDb);
+    // get(child(dbRef, `/userPool`))
+    //   .then((snapshot) => {
+    //     if (snapshot.exists()) {
+    //       setUserArray(snapshot.val());
+    //     } else {
+    //       console.log("No data available");
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
+  //   console.log("dtaa",userArray)
+  // }, []);
 
-  const checkUserExisted = async (data) => {
-    for (const element of Object.values(userArray)) {
-      if (element.email === data.get("email")) {
-        toast.error("User already existed.");
-        return true;
-      }
-    }
-    return false;
+  const checkUserExisted = async (user) => {
+    // const foundUser = await 
+    // for (const element of Object.values(userArray)) {
+    //   if (element.email === data.get("email")) {
+    //     toast.error("User already existed.");
+    //     return true;
+    //   }
+    // }
+    // return false;
   };
 
   const createUser = async (user) => {

@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import firebaseDb from "../../Firebase/firebaseconfig";
 import { ref, child, get } from "firebase/database";
+import axios from "axios";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -25,32 +26,52 @@ const Login = () => {
     }
   }, []);
 
-  const verifyUser = (data) => {
-    const dbRef = ref(firebaseDb);
-    get(child(dbRef, `/userPool`))
-      .then((snapshot) => {
-        for (const [key, value] of Object.entries(snapshot.val())) {
-          if (
-            value.email === data.get("email") &&
-            value.password === data.get("password")
-          ) {
-            navigate("/home");
-            localStorage.setItem(
-              "loggedInUserID",
-              JSON.stringify({ userId: key, role: value.role })
-            );
-            return;
-          } else if (
-            key ===
-            Object.keys(snapshot.val())[Object.keys(snapshot.val()).length - 1]
-          ) {
-            toast.error("Please enter valid credentials");
-          }
-        }
-      })
-      .catch((error) => {
-        console.error(error);
+  const verifyUser = async (data) => {
+    try {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/login`,{
+        userName: data.get("email"),
+        password: data.get("password")
       });
+      if(!response) {
+        return toast.error("Please enter valid credentials");
+      }
+      console.log(response);
+      // navigate("/home");
+      // localStorage.setItem(
+      //   "loggedInUserID",
+      //   JSON.stringify({ userId: key, role: value.role })
+      // );
+      return;
+    } catch (error) {
+      console.error(error);
+    }
+    
+
+    // const dbRef = ref(firebaseDb);
+    // get(child(dbRef, `/userPool`))
+    //   .then((snapshot) => {
+    //     for (const [key, value] of Object.entries(snapshot.val())) {
+    //       if (
+    //         value.email === data.get("email") &&
+    //         value.password === data.get("password")
+    //       ) {
+    //         navigate("/home");
+    //         localStorage.setItem(
+    //           "loggedInUserID",
+    //           JSON.stringify({ userId: key, role: value.role })
+    //         );
+    //         return;
+    //       } else if (
+    //         key ===
+    //         Object.keys(snapshot.val())[Object.keys(snapshot.val()).length - 1]
+    //       ) {
+    //         toast.error("Please enter valid credentials");
+    //       }
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
   };
 
   const login = async (event) => {
