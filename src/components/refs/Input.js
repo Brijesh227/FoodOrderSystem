@@ -7,7 +7,7 @@ class Input extends Component {
     this.inputRef = React.createRef()
   }
 
-  focusInput() {
+  componentDidMount() {
     this.inputRef.current.focus()
   }
 
